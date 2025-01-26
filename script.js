@@ -2,28 +2,28 @@
 
 // Data
 const account1 = {
-  owner: 'Jonas Schmedtmann',
+  owner: 'Spandan Das Barman',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
 };
 
 const account2 = {
-  owner: 'Jessica Davis',
+  owner: 'Abhijeet Paul',
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
 };
 
 const account3 = {
-  owner: 'Steven Thomas Williams',
+  owner: 'Karan Agrawal',
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
 };
 
 const account4 = {
-  owner: 'Sarah Smith',
+  owner: 'Ria Mukherjee',
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
@@ -56,3 +56,48 @@ const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
+
+// Functions
+
+const displayMovements = function (movements) {
+  containerMovements.innerHTML = '';
+  movements.forEach((mov, i) => {
+    const typeOfMovement = mov > 0 ? 'deposit' : 'withdrawal';
+    containerMovements.insertAdjacentHTML(
+      'afterbegin',
+      `
+      <div class="movements__row">
+          <div class="movements__type movements__type--${typeOfMovement}">${
+        i + 1
+      } ${typeOfMovement}</div>
+          <div class="movements__date">3 days ago</div>
+          <div class="movements__value">₹${Math.abs(mov)}</div>
+      </div>
+      `
+    );
+  });
+};
+
+const displaySummary = function (account) {
+  const totalDeposit = account.movements
+    .filter(mov => mov > 0)
+    .reduce((sum, mov) => sum + mov, 0);
+
+  const totalWithradrawl = account.movements
+    .filter(mov => mov < 0)
+    .reduce((sum, mov) => sum + mov, 0);
+
+  const totalInterest = account.movements
+    .filter(mov => mov > 0)
+    .map(mov => (mov * account.interestRate) / 100)
+    .reduce((sum, mov) => sum + mov, 0);
+
+  labelSumIn.textContent = '₹' + totalDeposit;
+  labelSumOut.textContent = '₹' + Math.abs(totalWithradrawl);
+  labelSumInterest.textContent = '₹' + totalInterest;
+};
+
+// Logic
+
+displayMovements(accounts[0].movements);
+displaySummary(accounts[0]);
