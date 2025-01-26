@@ -94,7 +94,7 @@ const displaySummary = function (account) {
     .reduce((sum, mov) => sum + mov, 0);
 
   labelSumIn.textContent = '₹ ' + totalDeposit;
-  labelSumOut.textContent = '₹' + Math.abs(totalWithradrawl);
+  labelSumOut.textContent = '₹ ' + Math.abs(totalWithradrawl);
   labelSumInterest.textContent = '₹ ' + totalInterest;
 };
 
