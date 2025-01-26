@@ -90,14 +90,24 @@ const displaySummary = function (account) {
   const totalInterest = account.movements
     .filter(mov => mov > 0)
     .map(mov => (mov * account.interestRate) / 100)
+    .filter(interest => interest > 1)
     .reduce((sum, mov) => sum + mov, 0);
 
-  labelSumIn.textContent = '₹' + totalDeposit;
+  labelSumIn.textContent = '₹ ' + totalDeposit;
   labelSumOut.textContent = '₹' + Math.abs(totalWithradrawl);
-  labelSumInterest.textContent = '₹' + totalInterest;
+  labelSumInterest.textContent = '₹ ' + totalInterest;
+};
+
+const displayAvailableBalance = function (account) {
+  const totalAvailableBalance = account.movements.reduce(
+    (sum, mov) => sum + mov,
+    0
+  );
+  labelBalance.textContent = '₹ ' + totalAvailableBalance;
 };
 
 // Logic
 
 displayMovements(accounts[0].movements);
 displaySummary(accounts[0]);
+displayAvailableBalance(accounts[0]);
