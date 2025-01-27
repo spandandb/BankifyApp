@@ -106,8 +106,19 @@ const displayAvailableBalance = function (account) {
   labelBalance.textContent = '₹ ' + totalAvailableBalance;
 };
 
+const createUsernames = function (accounts) {
+  accounts.forEach(account => {
+    account.username = account.owner
+      .split(' ')
+      .map(namePart => namePart[0].toLowerCase())
+      .join('');
+  });
+};
+
 // Logic
 
 displayMovements(accounts[0].movements);
 displaySummary(accounts[0]);
 displayAvailableBalance(accounts[0]);
+createUsernames(accounts);
+console.log(accounts);
