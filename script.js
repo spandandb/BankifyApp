@@ -61,7 +61,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
-  movements.forEach((mov, i) => {
+  movements?.forEach((mov, i) => {
     const typeOfMovement = mov > 0 ? 'deposit' : 'withdrawal';
     containerMovements.insertAdjacentHTML(
       'afterbegin',
@@ -79,7 +79,7 @@ const displayMovements = function (movements) {
 };
 
 const displaySummary = function (account) {
-  const totalDeposit = account.movements
+  const totalDeposit = account?.movements
     .filter(mov => mov > 0)
     .reduce((sum, mov) => sum + mov, 0);
 
@@ -99,7 +99,7 @@ const displaySummary = function (account) {
 };
 
 const displayAvailableBalance = function (account) {
-  const totalAvailableBalance = account.movements.reduce(
+  const totalAvailableBalance = account?.movements.reduce(
     (sum, mov) => sum + mov,
     0
   );
@@ -117,8 +117,26 @@ const createUsernames = function (accounts) {
 
 // Logic
 
-displayMovements(accounts[0].movements);
-displaySummary(accounts[0]);
-displayAvailableBalance(accounts[0]);
 createUsernames(accounts);
-console.log(accounts);
+
+// Event listener
+let currentAccount;
+btnLogin.addEventListener('click', function (event) {
+  event.preventDefault();
+
+  accounts.find(account => {
+    if (account.username === inputLoginUsername.value) {
+      if (account.pin === Number(inputLoginPin.value)) {
+        currentAccount = account;
+        containerApp.style.opacity = 1;
+        inputLoginPin.value = inputLoginUsername.value = '';
+        inputLoginPin.blur();
+        return true;
+      }
+    }
+  });
+
+  currentAccount && displayMovements(currentAccount?.movements);
+  currentAccount && displaySummary(currentAccount);
+  currentAccount && displayAvailableBalance(currentAccount);
+});
