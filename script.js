@@ -104,6 +104,7 @@ const displayAvailableBalance = function (account) {
     0
   );
   labelBalance.textContent = '₹ ' + totalAvailableBalance;
+  account.balance = totalAvailableBalance;
 };
 
 const createUsernames = function (accounts) {
@@ -118,6 +119,10 @@ const createUsernames = function (accounts) {
 // Logic
 
 createUsernames(accounts);
+accounts.forEach(account => {
+  const totalBalance = account.movements.reduce((sum, mov) => sum + mov, 0);
+  account.balance = totalBalance;
+});
 
 // Event listener
 let currentAccount;
