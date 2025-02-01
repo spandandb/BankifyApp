@@ -116,6 +116,12 @@ const createUsernames = function (accounts) {
   });
 };
 
+const refreshUI = function (account) {
+  displayMovements(account.movements);
+  displaySummary(account);
+  displayAvailableBalance(account);
+};
+
 // Logic
 
 createUsernames(accounts);
@@ -125,6 +131,7 @@ accounts.forEach(account => {
 });
 
 // Event listener
+
 let currentAccount;
 btnLogin.addEventListener('click', function (event) {
   event.preventDefault();
@@ -141,7 +148,25 @@ btnLogin.addEventListener('click', function (event) {
     }
   });
 
-  currentAccount && displayMovements(currentAccount?.movements);
-  currentAccount && displaySummary(currentAccount);
-  currentAccount && displayAvailableBalance(currentAccount);
+  currentAccount && refreshUI(currentAccount);
+});
+
+btnTransfer.addEventListener('click', function (event) {
+  event.preventDefault();
+
+  const transferToAccount = accounts.find(
+    account => inputTransferTo.value === account.username
+  );
+
+  if (
+    transferToAccount &&
+    transferToAccount.username !== currentAccount.username &&
+    Number(inputTransferAmount.value) > 0 &&
+    Number(inputTransferAmount.value) <= currentAccount.balance
+  ) {
+    currentAccount.movements.push(Number(inputTransferAmount.value) * -1);
+    transferToAccount.movements.push(Number(inputTransferAmount.value));
+    transferToAccount && refreshUI(currentAccount);
+  }
+  inputTransferAmount.value = inputTransferTo.value = '';
 });
