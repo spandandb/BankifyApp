@@ -143,6 +143,9 @@ btnLogin.addEventListener('click', function (event) {
         containerApp.style.opacity = 1;
         inputLoginPin.value = inputLoginUsername.value = '';
         inputLoginPin.blur();
+        labelWelcome.textContent = `Welcome back, ${
+          currentAccount.owner.split(' ')[0]
+        }!`;
         return true;
       }
     }
@@ -182,6 +185,7 @@ btnClose.addEventListener('click', function (event) {
     );
     accounts.splice(deleteIndex, 1);
     containerApp.style.opacity = 0;
+    labelWelcome.textContent = 'Log in to get started';
   }
   inputCloseUsername.value = inputClosePin.value = '';
 });
