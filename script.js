@@ -189,3 +189,17 @@ btnClose.addEventListener('click', function (event) {
   }
   inputCloseUsername.value = inputClosePin.value = '';
 });
+
+btnLoan.addEventListener('click', function (event) {
+  event.preventDefault();
+  if (
+    currentAccount.movements.some(
+      mov => Number(inputLoanAmount.value) * 0.1 < mov
+    )
+  ) {
+    currentAccount.movements.push(Number(inputLoanAmount.value));
+    refreshUI(currentAccount);
+  }
+
+  inputLoanAmount.value = '';
+});
