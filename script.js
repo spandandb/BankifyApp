@@ -108,14 +108,21 @@ const inputClosePin = document.querySelector('.form__input--pin');
 // ? Functions
 
 const displayMovements = function (account, sort = false) {
-  containerMovements.innerHTML = '';
-  const movs = sort
-    ? account.movements.slice().sort((a, b) => a - b)
-    : account.movements;
-  movs?.forEach((mov, i) => {
-    const typeOfMovement = mov > 0 ? 'deposit' : 'withdrawal';
+  const combineMovDates = account.movements.map((mov, i) => ({
+    movement: mov,
+    date: account.movementsDates[i],
+  }));
 
-    const date = new Date(account.movementsDates[i]);
+  containerMovements.innerHTML = '';
+
+  const movs = sort
+    ? combineMovDates.sort((a, b) => a.movement - b.movement)
+    : combineMovDates;
+
+  movs?.forEach((mov, i) => {
+    const typeOfMovement = mov.movement > 0 ? 'deposit' : 'withdrawal';
+
+    const date = new Date(mov.date);
     const movDate = `${date.getDate().toString().padStart(2, '0')}/${String(
       date.getMonth() + 1
     ).padStart(2, '0')}/${date.getFullYear()}`;
@@ -128,7 +135,9 @@ const displayMovements = function (account, sort = false) {
         i + 1
       } ${typeOfMovement}</div>
           <div class="movements__date">${movDate}</div>
-          <div class="movements__value">₹${Math.abs(mov).toFixed(2)}</div>
+          <div class="movements__value">₹${Math.abs(mov.movement).toFixed(
+            2
+          )}</div>
       </div>
       `
     );
