@@ -1,6 +1,6 @@
 'use strict';
 
-// Data
+// ? Data
 const account1 = {
   owner: 'Spandan Das Barman',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
@@ -31,7 +31,7 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
-// Elements
+// ? Elements
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
 const labelBalance = document.querySelector('.balance__value');
@@ -57,7 +57,7 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-// Functions
+// ? Functions
 
 const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
@@ -73,7 +73,7 @@ const displayMovements = function (movements, sort = false) {
         i + 1
       } ${typeOfMovement}</div>
           <div class="movements__date">3 days ago</div>
-          <div class="movements__value">₹${Math.abs(mov)}</div>
+          <div class="movements__value">₹${Math.abs(mov).toFixed(2)}</div>
       </div>
       `
     );
@@ -95,9 +95,9 @@ const displaySummary = function (account) {
     .filter(interest => interest > 1)
     .reduce((sum, mov) => sum + mov, 0);
 
-  labelSumIn.textContent = '₹ ' + totalDeposit;
-  labelSumOut.textContent = '₹ ' + Math.abs(totalWithradrawl);
-  labelSumInterest.textContent = '₹ ' + totalInterest;
+  labelSumIn.textContent = '₹ ' + totalDeposit.toFixed(2);
+  labelSumOut.textContent = '₹ ' + Math.abs(totalWithradrawl).toFixed(2);
+  labelSumInterest.textContent = '₹ ' + totalInterest.toFixed(2);
 };
 
 const displayAvailableBalance = function (account) {
@@ -105,7 +105,7 @@ const displayAvailableBalance = function (account) {
     (sum, mov) => sum + mov,
     0
   );
-  labelBalance.textContent = '₹ ' + totalAvailableBalance;
+  labelBalance.textContent = '₹ ' + totalAvailableBalance.toFixed(2);
   account.balance = totalAvailableBalance;
 };
 
@@ -124,7 +124,7 @@ const refreshUI = function (account) {
   displayAvailableBalance(account);
 };
 
-// Logic
+// ? Logic
 
 createUsernames(accounts);
 accounts.forEach(account => {
@@ -132,7 +132,7 @@ accounts.forEach(account => {
   account.balance = totalBalance;
 });
 
-// Event listener
+// ? Event listener
 
 let currentAccount;
 btnLogin.addEventListener('click', function (event) {
