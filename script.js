@@ -212,3 +212,9 @@ btnSort.addEventListener('click', function (event) {
   sorted = !sorted;
   displayMovements(currentAccount.movements, sorted);
 });
+
+// ! FAKE LOGIN IMPLEMENTATION
+
+currentAccount = accounts[0];
+refreshUI(accounts[0]);
+containerApp.style.opacity = 1;
