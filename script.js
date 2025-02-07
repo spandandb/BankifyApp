@@ -78,6 +78,7 @@ const account4 = {
 };
 
 const accounts = [account1, account2, account3, account4];
+let currentAccount, timer;
 
 // ? Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -119,6 +120,25 @@ const dateFormatter = function (account, date) {
     day: '2-digit',
     month: '2-digit',
   }).format(date);
+};
+
+const startLogoutTimer = function (timer) {
+  let time = timer;
+  const clockTimer = function () {
+    const mins = Math.trunc(+(time / 60));
+    const sec = String(time % 60).padStart(2, '0');
+    labelTimer.textContent = `${mins}:${sec}`;
+
+    time--;
+    if (time < 0) {
+      clearInterval(countdownTimer);
+      containerApp.style.opacity = 0;
+      labelWelcome.textContent = 'Log in to get started';
+    }
+  };
+  clockTimer();
+  const countdownTimer = setInterval(clockTimer, 1000);
+  return countdownTimer;
 };
 
 const currencyFormatter = function (account, amount) {
@@ -223,7 +243,6 @@ accounts.forEach(account => {
 
 // ? Event listener
 
-let currentAccount;
 btnLogin.addEventListener('click', function (event) {
   event.preventDefault();
 
@@ -244,6 +263,10 @@ btnLogin.addEventListener('click', function (event) {
           year: 'numeric',
         }).format(date);
         labelDate.textContent = dateIntl;
+
+        if (timer) clearInterval(timer);
+        timer = startLogoutTimer(180);
+
         return true;
       }
     }
@@ -273,6 +296,9 @@ btnTransfer.addEventListener('click', function (event) {
     transferToAccount && refreshUI(currentAccount);
   }
   inputTransferAmount.value = inputTransferTo.value = '';
+
+  clearInterval(timer);
+  timer = startLogoutTimer(180);
 });
 
 btnClose.addEventListener('click', function (event) {
@@ -304,6 +330,8 @@ btnLoan.addEventListener('click', function (event) {
   }
 
   inputLoanAmount.value = '';
+  clearInterval(timer);
+  timer = startLogoutTimer(180);
 });
 
 let sorted = false;
