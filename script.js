@@ -19,7 +19,7 @@ const account1 = {
     '2025-02-06T14:11:59.604Z',
   ],
   currency: 'INR',
-  locale: 'en-IN',
+  locale: 'en-US',
 };
 
 const account2 = {
@@ -38,8 +38,8 @@ const account2 = {
     '2020-06-25T18:49:59.371Z',
     '2020-07-26T12:01:20.894Z',
   ],
-  currency: 'INR',
-  locale: 'en-IN',
+  currency: 'EUR',
+  locale: 'pt-PT',
 };
 
 const account3 = {
@@ -57,8 +57,8 @@ const account3 = {
     '2020-06-25T18:49:59.371Z',
     '2020-07-26T12:01:20.894Z',
   ],
-  currency: 'INR',
-  locale: 'en-IN',
+  currency: 'BDT',
+  locale: 'bn-BD',
 };
 
 const account4 = {
@@ -73,7 +73,7 @@ const account4 = {
     '2020-04-01T10:17:24.185Z',
     '2020-05-08T14:11:59.604Z',
   ],
-  currency: 'INR',
+  currency: 'USD',
   locale: 'en-IN',
 };
 
@@ -121,6 +121,13 @@ const dateFormatter = function (account, date) {
   }).format(date);
 };
 
+const currencyFormatter = function (account, amount) {
+  return new Intl.NumberFormat(account.locale, {
+    style: 'currency',
+    currency: account.currency,
+  }).format(amount);
+};
+
 const displayMovements = function (account, sort = false) {
   const combineMovDates = account.movements.map((mov, i) => ({
     movement: mov,
@@ -147,8 +154,9 @@ const displayMovements = function (account, sort = false) {
         i + 1
       } ${typeOfMovement}</div>
           <div class="movements__date">${movDate}</div>
-          <div class="movements__value">₹${Math.abs(mov.movement).toFixed(
-            2
+          <div class="movements__value">${currencyFormatter(
+            account,
+            mov.movement
           )}</div>
       </div>
       `
@@ -171,9 +179,12 @@ const displaySummary = function (account) {
     .filter(interest => interest > 1)
     .reduce((sum, mov) => sum + mov, 0);
 
-  labelSumIn.textContent = '₹ ' + totalDeposit.toFixed(2);
-  labelSumOut.textContent = '₹ ' + Math.abs(totalWithradrawl).toFixed(2);
-  labelSumInterest.textContent = '₹ ' + totalInterest.toFixed(2);
+  labelSumIn.textContent = currencyFormatter(account, totalDeposit);
+  labelSumOut.textContent = currencyFormatter(
+    account,
+    Math.abs(totalWithradrawl)
+  );
+  labelSumInterest.textContent = currencyFormatter(account, totalInterest);
 };
 
 const displayAvailableBalance = function (account) {
@@ -181,7 +192,7 @@ const displayAvailableBalance = function (account) {
     (sum, mov) => sum + mov,
     0
   );
-  labelBalance.textContent = '₹ ' + totalAvailableBalance.toFixed(2);
+  labelBalance.textContent = currencyFormatter(account, totalAvailableBalance);
   account.balance = totalAvailableBalance;
 };
 
