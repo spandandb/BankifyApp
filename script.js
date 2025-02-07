@@ -107,16 +107,18 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 // ? Functions
 
-const dateFormatter = function (date) {
+const dateFormatter = function (account, date) {
   const dateDiff = Math.trunc((new Date() - date) / (1000 * 60 * 60 * 24));
 
   if (dateDiff === 0) return 'Today';
   if (dateDiff === 1) return 'Yesterday';
   if (dateDiff <= 7) return `${dateDiff} days ago`;
 
-  return `${date.getDate().toString().padStart(2, '0')}/${String(
-    date.getMonth() + 1
-  ).padStart(2, '0')}/${date.getFullYear()}`;
+  return new Intl.DateTimeFormat(account.locale, {
+    year: 'numeric',
+    day: '2-digit',
+    month: '2-digit',
+  }).format(date);
 };
 
 const displayMovements = function (account, sort = false) {
@@ -135,7 +137,7 @@ const displayMovements = function (account, sort = false) {
     const typeOfMovement = mov.movement > 0 ? 'deposit' : 'withdrawal';
 
     const date = new Date(mov.date);
-    const movDate = dateFormatter(date);
+    const movDate = dateFormatter(account, date);
 
     containerMovements.insertAdjacentHTML(
       'afterbegin',
@@ -225,13 +227,12 @@ btnLogin.addEventListener('click', function (event) {
           currentAccount.owner.split(' ')[0]
         }!`;
         const date = new Date();
-        labelDate.textContent = `${date
-          .getDate()
-          .toString()
-          .padStart(2, '0')}/${String(date.getMonth() + 1).padStart(
-          2,
-          '0'
-        )}/${date.getFullYear()}`;
+        const dateIntl = new Intl.DateTimeFormat(account.locale, {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+        }).format(date);
+        labelDate.textContent = dateIntl;
         return true;
       }
     }
